@@ -1,5 +1,11 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent, nativeTheme } from "electron";
 import { join } from "path";
+import ExtensionManager from "./ExtensionManager";
+import AppFramework from "./AppFramework";
+import { AppContext } from "./ExtensionTypes";
+
+const pluginManager: ExtensionManager = new ExtensionManager();
+const appFramework: AppFramework = new AppFramework();
 
 const createBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
     const preloadScriptFilePath = appIsPackaged
@@ -36,10 +42,22 @@ const registerNativeThemeEventListeners = (allBrowserWindows: BrowserWindow[]) =
     });
 };
 
+const loadExtensions = () => {
+    pluginManager.loadExtensionsInPaths();
+}
+
+const initAppFramework = () => {
+}
+
+
 (async () => {
     await app.whenReady();
+    initAppFramework();
+    loadExtensions();
     const mainWindow = createBrowserWindow(app.isPackaged);
     loadFileOrUrl(mainWindow, app.isPackaged);
     registerIpcEventListeners();
     registerNativeThemeEventListeners(BrowserWindow.getAllWindows());
 })();
+
+export const getAppContext = (): AppContext => { return { appFramework } };

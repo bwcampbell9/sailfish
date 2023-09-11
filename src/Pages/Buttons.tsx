@@ -1,18 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Text } from "@fluentui/react-components";
 import { AddCircle24Regular } from "@fluentui/react-icons";
 import { Section } from "./Section";
+import { useState } from "react";
 
 export const Buttons = () => {
+    const [message, setMessage] = useState<string>("no message yet");
+
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 20, padding: 10, boxSizing: "border-box" }}>
             <Text size={600}>Buttons</Text>
             <Section
-                title="Shapes"
+                title={message}
                 content={
                     <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-                        <Button shape="circular">Circular</Button>
-                        <Button shape="rounded">Rounded</Button>
-                        <Button shape="square">Square</Button>
+                        <Button shape="circular" onClick={() =>  window.ContextBridge.executeCommand("ado.helloWorld", "circular button").then(m => setMessage(m as string))}>Circular</Button>
+                        <Button shape="rounded" onClick={() => window.ContextBridge.executeCommand("ado.helloWorld", "rounded button").then(m => setMessage(m as string))}>Rounded</Button>
+                        <Button shape="square" onClick={() => window.ContextBridge.executeCommand("ado.helloWorld", "square button").then(m => setMessage(m as string))}>Square</Button>
                     </div>
                 }
             />
