@@ -7,6 +7,6 @@ contextBridge.exposeInMainWorld("ContextBridge", <ContextBridge>{
     themeShouldUseDarkColors: () => ipcRenderer.sendSync("themeShouldUseDarkColors"),
     executeCommand: (commandId: string, ...args: unknown[]) => {
         console.log("Got command: " + commandId + " args: " + args)
-        return ipcRenderer.invoke("command::" + commandId, args)
+        return ipcRenderer.invoke("command::" + commandId, ...args)
     },
 });

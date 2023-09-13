@@ -2,10 +2,15 @@
 import { Button, Text } from "@fluentui/react-components";
 import { AddCircle24Regular } from "@fluentui/react-icons";
 import { Section } from "./Section";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import CardComponent from "@/Views/CardComponent";
 
 export const Buttons = () => {
     const [message, setMessage] = useState<string>("no message yet");
+
+    useEffect(() => {
+        window.ContextBridge.executeCommand("sailfish.renderCard", "ado.skeletonCard", "card-tst");
+    }, []);
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 20, padding: 10, boxSizing: "border-box" }}>
@@ -22,15 +27,7 @@ export const Buttons = () => {
             />
             <Section
                 title="Appearance"
-                content={
-                    <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-                        <Button appearance="outline">Outline</Button>
-                        <Button appearance="primary">Primary</Button>
-                        <Button appearance="secondary">Secondary</Button>
-                        <Button appearance="subtle">Subtle</Button>
-                        <Button appearance="transparent">Transparent</Button>
-                    </div>
-                }
+                content={<div id="card-tst"/>}
             />
             <Section
                 title="Icons"

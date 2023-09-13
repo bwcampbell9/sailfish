@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, IpcMainEvent, nativeTheme } from "electron";
+import { app, BrowserWindow, ipcMain, IpcMainEvent, nativeTheme, net, protocol } from "electron";
 import { join } from "path";
 import ExtensionManager from "./ExtensionManager";
 import AppFramework from "./AppFramework";
@@ -49,9 +49,20 @@ const loadExtensions = () => {
 const initAppFramework = () => {
 }
 
+const registerFileProtocol = () => {
+    app.whenReady().then(() => {
+        protocol.handle('file', async (request) => {
+          console.log("file request");
+          console.log(request);
+          return new Response('Hello World')
+        });
+    });
+}
+
 
 (async () => {
     await app.whenReady();
+    registerFileProtocol();
     initAppFramework();
     loadExtensions();
     const mainWindow = createBrowserWindow(app.isPackaged);

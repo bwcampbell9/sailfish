@@ -2,7 +2,7 @@ import { app } from 'electron';
 import { join } from 'path';
 import fs from 'fs'
 import { getAppContext } from '.';
-import { Command, View } from './AppFramework';
+import { Command, CardView } from './AppFramework';
 
 interface ExtensionManifest {
     version: string;
@@ -12,7 +12,7 @@ interface ExtensionManifest {
 }
 
 interface ExtensionContext {
-    registerView: (viewId: string, view: View) => void;
+    registerCard: (cardId: string, card: CardView) => void;
     registerCommand: (commandId: string, command: Command) => void;
 }
 
@@ -72,8 +72,8 @@ export default class ExtensionRepository {
         try {
             console.log("Loading extension " + 'file://' + extensionInfo.main);
             const extensionObject: Extension = await import('file://' + extensionInfo.main);
-    
-            extensionObject.init?.(this.buildExtensionContext(extensionInfo.name));
+            console.log(extensionObject)
+            extensionObject.init?.(this.buildExtensionContext(extensionInfo.name, 'file://' + extensionInfo.main));
     
             this.loadedExtensions.push(extensionInfo);
         } catch (err) {
@@ -81,9 +81,11 @@ export default class ExtensionRepository {
         }
     }
 
-    buildExtensionContext(extensionId: string): ExtensionContext {
+    buildExtensionContext(extensionId: string, extensionPath: string): ExtensionContext {
         return {
-            registerView: getAppContext().appFramework.registerView,
+            registerCard: (cardId:string, card: CardView) => {
+                getAppContext().appFramework.registerCard(extensionId, cardId, { ...card });
+            },
             registerCommand: (commandId: string, command: Command) => {
                 getAppContext().appFramework.registerCommand(extensionId, commandId, command);
             }
