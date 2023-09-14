@@ -13,12 +13,16 @@ const createBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
         ? join(__dirname, "..", "..", "dist-electron", "preload", "index.js")
         : join(__dirname, "..", "preload", "index.js");
 
-    return new BrowserWindow({
+    const win = new BrowserWindow({
+        backgroundColor: "#000000",
+        show: false,
         autoHideMenuBar: true,
         webPreferences: {
             preload: preloadScriptFilePath,
         },
     });
+    win.webContents.openDevTools({mode: 'undocked'})
+    return win;
 };
 
 const createSearchBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
@@ -49,7 +53,7 @@ const createSearchBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
     });
 
     window.on('blur', () => window.hide());
-    window.webContents.openDevTools({mode: 'undocked'})
+    //window.webContents.openDevTools({mode: 'undocked'})
     const positioner = new Positioner(window);
     positioner.move('center'); 
     window.setMenuBarVisibility(false);
@@ -110,6 +114,11 @@ const registerSearchService = (searchWindow: BrowserWindow) => {
     registerFileProtocol();
     loadExtensions();
     const mainWindow = createBrowserWindow(app.isPackaged);
+    mainWindow.maximize();
+    mainWindow.on('ready-to-show', function() {
+        mainWindow.show();
+        mainWindow.focus();
+    });
     const searchWindow = createSearchBrowserWindow(app.isPackaged)
     appFramework = new AppFramework(mainWindow, searchWindow);
     registerSearchService(searchWindow);
@@ -120,6 +129,7 @@ const registerSearchService = (searchWindow: BrowserWindow) => {
 
 app.on('will-quit', () => {
     // Unregister all shortcuts.
+    appFramework.willQuit();
     globalShortcut.unregisterAll();
   })
 

@@ -211,6 +211,11 @@ export default class AppFramework {
         });
     }
 
+    public willQuit(): void {
+        this.mainWindow.close();
+        this.searchWindow.close();
+    }
+
     public registerCard(extensionId: string, cardId: string, cardProps: CardView) {
         const fullCardId = extensionId + '.' + cardId;
         console.log("Registering card: " + fullCardId);
