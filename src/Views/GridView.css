@@ -1,0 +1,35 @@
+.circle-grid {
+    background-image: radial-gradient(circle at 1px 1px, #464646 1px, rgba(0, 0, 0, 0) 1px);
+}
+
+.square-grid {
+    background-image:
+      linear-gradient(to right, rgb(32, 32, 32) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(32, 32, 32) 1px, transparent 1px);
+}
+
+.full-width {
+    width: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.card {
+    -webkit-transition: all .1s ease;
+    -moz-transition: all .1s ease;
+    -ms-transition: all .1s ease;
+    -o-transition: all .1s ease;
+    transition: all .1s ease;
+}
+
+.rotate270 {
+    transform: rotate(270deg);
+}
+.rotate180 {
+    transform: rotate(180deg);
+}
+.rotate90 {
+    transform: rotate(90deg);
+}

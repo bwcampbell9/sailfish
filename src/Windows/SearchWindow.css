@@ -1,0 +1,28 @@
+
+.result-focus:focus-within > .result-card {
+    background-color: rgb(105, 134, 143);
+}
+
+.result-card:hover {
+    background-color: rgb(67, 69, 70);
+}
+
+.result-card-focused {
+    background-color: rgb(105, 134, 143) !important;
+}
+
+.result-focus:focus {
+    outline: none;
+}
+
+.search-result-link {
+    text-decoration: none;
+}
+
+.search-result-link:hover {
+    text-decoration: none;
+}
+
+.search-result-link:focus {
+    text-decoration: none;
+}

@@ -1,0 +1,12 @@
+.card-shop-card {
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    transform: translate(-50px, 0px);
+}
+.card-shop-container:hover > .card-shop-card {
+    background-color: rgb(120, 115, 122);
+    transform: translate(0px, 0px);
+}

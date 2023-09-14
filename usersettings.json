@@ -1,0 +1,9 @@
+{
+    "project-vault-root": {
+        "name": "Project Vault Root",
+        "description": "Folder containing the project vault",
+        "type": "filepath",
+        "defaultValue": "",
+        "value": "C:/Projects/Coding/Sailfish/Vault"
+    }
+}
