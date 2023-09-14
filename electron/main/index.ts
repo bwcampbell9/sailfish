@@ -53,7 +53,7 @@ const createSearchBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
     });
 
     window.on('blur', () => window.hide());
-    //window.webContents.openDevTools({mode: 'undocked'})
+    window.webContents.openDevTools({mode: 'undocked'})
     const positioner = new Positioner(window);
     positioner.move('center'); 
     window.setMenuBarVisibility(false);
@@ -101,7 +101,6 @@ const registerFileProtocol = () => {
 }
 
 const registerSearchService = (searchWindow: BrowserWindow) => {
-
     globalShortcut.register('Alt+E', () => {
         console.log('Search is pressed')
         searchWindow.show();
@@ -129,7 +128,6 @@ const registerSearchService = (searchWindow: BrowserWindow) => {
 
 app.on('will-quit', () => {
     // Unregister all shortcuts.
-    appFramework.willQuit();
     globalShortcut.unregisterAll();
   })
 

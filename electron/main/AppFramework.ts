@@ -212,7 +212,10 @@ export default class AppFramework {
     }
 
     public willQuit(): void {
+        console.log("closing all");
+        this.mainWindow.webContents.closeDevTools();
         this.mainWindow.close();
+        this.searchWindow.webContents.closeDevTools();
         this.searchWindow.close();
     }
 

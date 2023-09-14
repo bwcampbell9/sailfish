@@ -26,9 +26,19 @@ const renderTabs = () => {
     );
 };
 
+const Watermark = () => {
+    return (<div style={{
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+    }}>No views to show</div>)
+}
+
 const components = {
     tray: (props: IDockviewPanelProps<{ title: string }>) => {
-        props.api.group.api.setConstraints({minimumWidth: 0})
+        props.api.group.api.setConstraints({minimumWidth: 0, maximumWidth: 60})
         props.api.setSize({width: 60})
         return (
             <TabList style={{padding: 10}} defaultSelectedValue="tab1" vertical size="large">
@@ -45,6 +55,11 @@ const components = {
     body: (props: IDockviewPanelProps<{ title: string }>) => {
         return (
             <DashboardPage/>
+        );
+    },
+    watermark: (props: IDockviewPanelProps<{ title: string }>) => {
+        return (
+            <Watermark/>
         );
     },
 };
@@ -71,13 +86,14 @@ export const MainWindow = () => {
 
         treeView.group.header.hidden = true;
         treeView.group.locked = true;
-      
-        event.api.addPanel({
+        
+        const mainPanel = event.api.addPanel({
             id: "panel_2",
             component: "body",
             position: { referencePanel: 'panel_1', direction: 'right' },
             params: { title: "Panel 2" }
         });
+        mainPanel.group.locked = true;
     };
 
     return (
@@ -86,6 +102,8 @@ export const MainWindow = () => {
             components={components}
             onReady={onReady}
             className={'dockview-theme-abyss'}
+            watermarkComponent={Watermark}
+            singleTabMode="fullwidth"
             />
         </div>
     );
