@@ -82,7 +82,7 @@ export const SearchWindow = () => {
     }, [debouncedSearch]);
 
     const executeResult = (result: SearchResult) => {
-        window.ContextBridge.executeCommand(result.command, result.args);
+        window.ContextBridge.executeCommand(result.command, ...result.args);
         window.ContextBridge.executeCommand("sailfish.closeSearch");
         searchRef.current.focus();
     }

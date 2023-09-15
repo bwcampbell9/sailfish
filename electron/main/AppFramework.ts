@@ -2,7 +2,8 @@ import { ipcMain, app, ipcRenderer, BrowserWindow } from "electron";
 import fs from 'fs'
 import { join, resolve } from 'path';
 import Vault, { VaultTask } from "./Vault";
-import { SearchCategory } from "./search";
+import { SearchCategory } from "./search/search";
+import { buildVaultSearchDB } from "./search/SearchDBBuilders";
 
 export interface View {
     name: string;
@@ -91,78 +92,7 @@ export default class AppFramework {
         this.vault = new Vault(join(appPath, 'vault.json'));
         this. settings = JSON.parse(fs.readFileSync(join(appPath, "usersettings.json"), 'utf-8'));
         this.setupAppCommands();
-        this.search = new SearchCategory({
-            'task-1': {
-                title: 'Task 1',
-                icon: 'task',
-                command: 'sailfish.ping'
-            },
-            'task-2': {
-                title: 'Task 2',
-                icon: 'task',
-                command: 'sailfish.ping'
-            },
-            'task-3': {
-                title: 'Task 3',
-                icon: 'task',
-                command: 'sailfish.ping'
-            },
-            'task-4': {
-                title: 'Task 4',
-                icon: 'task',
-                command: 'sailfish.ping'
-            },
-            'task-5': {
-                title: 'Task 5',
-                icon: 'task',
-                command: 'sailfish.ping'
-            },
-            'task-6': {
-                title: 'Task 6',
-                icon: 'task',
-                command: 'sailfish.ping'
-            },
-            'command-1': {
-                title: 'Command 1',
-                icon: 'command',
-                command: 'sailfish.ping'
-            },
-            'command-2': {
-                title: 'Command 2',
-                icon: 'command',
-                command: 'sailfish.ping'
-            },
-            'command-3': {
-                title: 'Command 3',
-                icon: 'command',
-                command: 'sailfish.ping'
-            },
-            'command-4': {
-                title: 'Command 4',
-                icon: 'command',
-                command: 'sailfish.ping'
-            },
-            'command-5': {
-                title: 'Command 5',
-                icon: 'command',
-                command: 'sailfish.ping'
-            },
-            'command-6': {
-                title: 'Command 6',
-                icon: 'command',
-                command: 'sailfish.ping'
-            },
-            'other-1': {
-                title: 'Other 1',
-                icon: 'other',
-                command: 'sailfish.ping'
-            },
-            'other-2': {
-                title: 'Other 2',
-                icon: 'other',
-                command: 'sailfish.ping'
-            }
-        });
+        this.search = new SearchCategory(buildVaultSearchDB(this.vault.getVault()));
     }
 
     setupAppCommands() {
@@ -207,6 +137,15 @@ export default class AppFramework {
             visibility: "protected",
             execute: () => {
                 this.searchWindow.hide();
+            }
+        });
+        this.registerCommand("sailfish", "openTask", {
+            name: "Open a task or switch to it",
+            visibility: "protected",
+            execute: (event, taskPath: string) => {
+                const task = this.vault.getTask(taskPath);
+                this.mainWindow.webContents.send("handle::sailfish.openTask", task);
+                this.mainWindow.focus();
             }
         });
     }

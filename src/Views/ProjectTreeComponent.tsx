@@ -12,6 +12,10 @@ import {
 export const ProjectTreeComponent = () => {
     const [vault, setVault] = useState<VaultFolder>(undefined);
 
+    const openTask = (itemPath) => {
+        window.ContextBridge.executeCommand("sailfish.openTask", itemPath);
+    }
+
     useEffect(() => {
         (async () => setVault(await window.ContextBridge.executeCommand("sailfish.getVault") as VaultFolder))();
     }, []);
@@ -20,15 +24,15 @@ export const ProjectTreeComponent = () => {
         <TreeItemLayout aside={<Button appearance="subtle" onClick={(e) => e.stopPropagation()} shape="circular" size="small" icon={<Add16Regular />} />}>{folderId}</TreeItemLayout>
         {children}
     </TreeItem>);
-    const makeItemComponent = (itemId, itemName) => (<TreeItem key={itemId} itemType="leaf">
-        <TreeItemLayout>{itemName}</TreeItemLayout>
+    const makeItemComponent = (itemId, item) => (<TreeItem onClick={() => openTask(item.path)} key={itemId} itemType="leaf">
+        <TreeItemLayout>{item.name}</TreeItemLayout>
     </TreeItem>);
 
     const buildVaultTree = (folder: VaultFolder) => {
         return (
             <Tree style={{width: "100%"}}>
                 {Object.entries(folder).map(([key, value]) => (typeof value?.name === "string" ?
-                    makeItemComponent(key, value.name) :
+                    makeItemComponent(key, value) :
                     makeFolderComponent(key, buildVaultTree(value as VaultFolder))
                 ))}
             </Tree>

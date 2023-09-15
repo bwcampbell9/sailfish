@@ -4,11 +4,12 @@ import { join } from 'path';
 
 export interface VaultTask {
     name: string;
+    path: string;
     metadata: object;
 }
 
 export interface VaultFolder {
-    [objectId: string]: VaultTask | VaultFolder;
+    [objectPath: string]: VaultTask | VaultFolder;
 }
 
 export default class Vault {
@@ -24,13 +25,26 @@ export default class Vault {
         return this.vault;
     }
 
-    addTask(path: string, taskId: string, task: VaultTask) {
+    addTask(folderPath: string, taskId: string, task: VaultTask) {
         let parentFolder = this.vault;
-        for(const segment in path.split('/')){
+        for(const segment in folderPath.split('/')){
             parentFolder = parentFolder[segment] as VaultFolder;
         }
         parentFolder[taskId] = task;
         this.writeVault();
+    }
+
+    getTask(taskPath: string): VaultTask {
+        console.log("Path: " + taskPath)
+        console.log(taskPath);
+        console.log(taskPath.split('/'));
+        let item: VaultFolder | VaultTask = this.vault;
+        for(const segment of taskPath.split('/')){
+            console.log("segment: " + segment)
+            item = item[segment];
+        }
+        console.log(item);
+        return item as VaultTask;
     }
 
     addFolder(path: string, folderId: string) {

@@ -21,7 +21,7 @@ const createBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
             preload: preloadScriptFilePath,
         },
     });
-    win.webContents.openDevTools({mode: 'undocked'})
+    //win.webContents.openDevTools({mode: 'undocked'})
     return win;
 };
 
@@ -53,7 +53,7 @@ const createSearchBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
     });
 
     window.on('blur', () => window.hide());
-    window.webContents.openDevTools({mode: 'undocked'})
+    //window.webContents.openDevTools({mode: 'undocked'})
     const positioner = new Positioner(window);
     positioner.move('center'); 
     window.setMenuBarVisibility(false);

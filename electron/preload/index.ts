@@ -6,7 +6,10 @@ contextBridge.exposeInMainWorld("ContextBridge", <ContextBridge>{
     onNativeThemeChanged: (callback: () => void) => ipcRenderer.on("nativeThemeChanged", callback),
     themeShouldUseDarkColors: () => ipcRenderer.sendSync("themeShouldUseDarkColors"),
     executeCommand: (commandId: string, ...args: unknown[]) => {
-        console.log("Got command: " + commandId + " args: " + args)
-        return ipcRenderer.invoke("command::" + commandId, ...args)
+        console.log("Got command: " + commandId + " args: " + args);
+        return ipcRenderer.invoke("command::" + commandId, ...args);
     },
+    handleCommand: (commandId: string, callback) => {
+        ipcRenderer.on("handle::" + commandId, callback);
+    }
 });

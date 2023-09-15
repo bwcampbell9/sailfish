@@ -2,30 +2,36 @@
     "active": {
         "task1": {
             "name": "Task 1",
+            "path": "active/task1",
             "metadata": {}
         },
         "task2": {
-            "name": "Task 1",
+            "name": "Task 2",
+            "path": "active/task2",
             "metadata": {}
         },
         "task3": {
-            "name": "Task 1",
+            "name": "Task 3",
+            "path": "active/task3",
             "metadata": {}
         }
     },
     "closed": {
         "task1": {
-            "name": "Task 1",
+            "name": "Task 4",
+            "path": "closed/task4",
             "metadata": {}
         },
         "task2": {
-            "name": "Task 1",
+            "name": "Task 5",
+            "path": "closed/task5",
             "metadata": {}
         }
     },
     "blocked": {
         "task1": {
-            "name": "Task 1",
+            "name": "Task 6",
+            "path": "blocked/task6",
             "metadata": {}
         }
     },

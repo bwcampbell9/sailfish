@@ -3,6 +3,7 @@ import {
     CalendarMonthRegular,
     CalendarMonthFilled,
     bundleIcon,
+    LineHorizontal120Regular,
   } from "@fluentui/react-icons";
 
   import {
@@ -12,8 +13,14 @@ import {
     } from 'dockview';
     import '../../node_modules/dockview/dist/styles/dockview.css';
 import { ProjectTreeComponent } from "../Views/ProjectTreeComponent";
-import { DashboardPage } from "../Pages/DashboardPage";
-    
+import { TabView } from "@/Views/TabView";
+import './MainWindow.css'
+
+export interface TaskMetadata {
+    id: string;
+    name: string;
+}
+
 const CalendarMonth = bundleIcon(CalendarMonthFilled, CalendarMonthRegular);
 const renderTabs = () => {
     return (
@@ -36,6 +43,16 @@ const Watermark = () => {
     }}>No views to show</div>)
 }
 
+const DragTab = () => (
+    <div style={{
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+    }}><LineHorizontal120Regular /></div>
+);
+
 const components = {
     tray: (props: IDockviewPanelProps<{ title: string }>) => {
         props.api.group.api.setConstraints({minimumWidth: 0, maximumWidth: 60})
@@ -54,7 +71,7 @@ const components = {
     },
     body: (props: IDockviewPanelProps<{ title: string }>) => {
         return (
-            <DashboardPage/>
+            <TabView/>
         );
     },
     watermark: (props: IDockviewPanelProps<{ title: string }>) => {
@@ -64,10 +81,11 @@ const components = {
     },
 };
 
+const tabComponents = {
+    dragTab: DragTab,
+}
 
 export const MainWindow = () => {
-
-
     const onReady = (event: DockviewReadyEvent) => {
         const tray = event.api.addPanel({
             id: "tray",
@@ -78,7 +96,7 @@ export const MainWindow = () => {
         tray.group.header.hidden = true;
 
         const treeView = event.api.addPanel({
-            id: "panel_1",
+            id: "tree-view",
             component: "tree",
             position: { referencePanel: 'tray', direction: 'right' },
             params: { title: "Panel 1" }
@@ -88,9 +106,10 @@ export const MainWindow = () => {
         treeView.group.locked = true;
         
         const mainPanel = event.api.addPanel({
-            id: "panel_2",
+            id: "body",
             component: "body",
-            position: { referencePanel: 'panel_1', direction: 'right' },
+            tabComponent: "dragTab",
+            position: { referencePanel: 'tree-view', direction: 'right' },
             params: { title: "Panel 2" }
         });
         mainPanel.group.locked = true;
@@ -101,7 +120,8 @@ export const MainWindow = () => {
             <DockviewReact
             components={components}
             onReady={onReady}
-            className={'dockview-theme-abyss'}
+            tabComponents={tabComponents}
+            className={'dockview-theme-abyss skinny-tabs'}
             watermarkComponent={Watermark}
             singleTabMode="fullwidth"
             />
