@@ -35,14 +35,11 @@ export const DashboardPage = ({layoutPath, task}: {layoutPath: string, task?: Va
 
     const setLayout = (layout: Layouts) => {
         // TODO: make layouts responsive by chosing correct one here
-        console.log(layout);
         layout && Object.values(layout)[0] &&
         setCards(Object.entries(Object.values(layout)[0])?.map(([key, value]: [ string, LayoutDimensions ]) => {
             // Layout fullCard Id is cardGroup.cardId
             const cardGroup = value.typeId.slice(0, key.indexOf('.'));
             const cardId = value.typeId.slice(key.indexOf('.') + 1);
-            console.log(key);
-            console.log(value);
             return {
                 instanceId: key,
                 element: AllCards.find(c => c.id === cardGroup).cards.find(c => c.id === cardId).component,
@@ -56,8 +53,6 @@ export const DashboardPage = ({layoutPath, task}: {layoutPath: string, task?: Va
         console.log(task);
         window.ContextBridge.executeCommand("layout-manager.getTaskLayout", layoutPath)
         .then(([resolvedPath, result]: [string, Layouts]) => {
-            console.log(resolvedPath);
-            console.log(result);
             isMounted && setLayout(result);
             isMounted && setResolvedLayoutPath(resolvedPath);
           })

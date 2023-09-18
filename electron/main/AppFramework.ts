@@ -166,6 +166,9 @@ export default class AppFramework {
             execute: (event, taskPath: string) => {
                 const task = this.vault.getTask(taskPath);
                 this.mainWindow.webContents.send("handle::sailfish.openTask", task);
+                if (this.mainWindow.isMinimized()) {
+                    this.mainWindow.restore();
+                }
                 this.mainWindow.focus();
             }
         });
