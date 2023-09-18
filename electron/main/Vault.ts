@@ -35,16 +35,29 @@ export default class Vault {
     }
 
     getTask(taskPath: string): VaultTask {
-        console.log("Path: " + taskPath)
-        console.log(taskPath);
-        console.log(taskPath.split('/'));
         let item: VaultFolder | VaultTask = this.vault;
         for(const segment of taskPath.split('/')){
-            console.log("segment: " + segment)
             item = item[segment];
         }
-        console.log(item);
         return item as VaultTask;
+    }
+
+    setMetadata(taskPath: string, key: string, value: object): void {
+        let item: VaultFolder | VaultTask = this.vault;
+        for(const segment of taskPath.split('/')){
+            item = item[segment];
+        }
+        item.metadata[key] = value;
+        this.writeVault();
+    }
+
+    setTitle(taskPath: string, value: string): void {
+        let item: VaultFolder | VaultTask = this.vault;
+        for(const segment of taskPath.split('/')){
+            item = item[segment];
+        }
+        item.name = value;
+        this.writeVault();
     }
 
     addFolder(path: string, folderId: string) {

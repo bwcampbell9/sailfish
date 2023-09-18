@@ -1,37 +1,36 @@
 import { DashboardPage } from "@/Pages/DashboardPage";
-import { DockviewReact, DockviewReadyEvent, IDockviewPanelProps } from "dockview";
+import { DockviewApi, DockviewReact, DockviewReadyEvent, IDockviewPanelProps } from "dockview";
 import { VaultTask } from "electron/main/Vault";
 
 const components = {
-    body: (props: IDockviewPanelProps<{ title: string }>) => {
+    body: (props: IDockviewPanelProps<VaultTask>) => {
         return (
-            <DashboardPage/>
+            <DashboardPage layoutPath={props.params.path} task={props.params}/>
         );
     },
-    home: (props: IDockviewPanelProps<{ title: string }>) => {
+    home: (props: IDockviewPanelProps<VaultTask>) => {
         return (
-            <DashboardPage/>
+            <DashboardPage layoutPath={":dashboard"} task={props.params}/>
         )
     },
 };
 
-const HomePanel = {
-    id: "home_panel",
-    component: "home",
-    params: { title: "Home" },
-}
 
 export const TabView = (props) => {
+    const addHomePanel = async (api: DockviewApi) => api.addPanel({
+            id: "home_panel",
+            component: "home",
+            params: await window.ContextBridge.executeCommand('sailfish.getTask', ":dashboard"),
+        });
+
     const onReady = (event: DockviewReadyEvent) => {
         event.api.onDidRemovePanel(() => {
-            console.log(event.api.panels.length);
             if(event.api.panels.length === 0) {
-                event.api.addPanel(HomePanel);
+                addHomePanel(event.api);
             }
         }),
 
         window.ContextBridge.handleCommand('sailfish.openTask', (e, task: VaultTask) => {
-            console.log(task.name);
             const existingPanel = event.api.getPanel(task.path);
             if(existingPanel) {
                 existingPanel.api.setActive();
@@ -45,7 +44,8 @@ export const TabView = (props) => {
                 newPanel.api.setActive();
             }
         });
-        event.api.addPanel(HomePanel);
+
+        addHomePanel(event.api)
     };
 
     return (

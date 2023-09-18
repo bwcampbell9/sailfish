@@ -1,5 +1,9 @@
 import { ComponentClass, FunctionComponent } from "react";
 import { SkeletonCard } from "./SkeletonCard";
+import { MarkdownCard } from "./MarkdownCard";
+import { GitCard } from "./GitCard";
+import { DescriptionCard } from "./DescriptionCard";
+import { TitleCard } from "./TitleCard";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ReactElement = string | FunctionComponent<any> | ComponentClass<any, any>;
@@ -38,21 +42,33 @@ export const AllCards: CardVeiwGroup[] = [
         ],
     },
     {
-        name: 'Test Cards 2',
-        id: "test-cards-2",
+        name: 'Sailfish Default',
+        id: "sailfish",
         cards: [
             {
-                name: 'Skeleton Card 3',
-                id: 'skeleton-card-3',
-                description: 'Renders a simple skeleton for testing card layouts 3?',
-                component: SkeletonCard,
+                name: 'Title Card',
+                id: 'title-card',
+                description: 'The task title',
+                component: TitleCard,
             },
             {
-                name: 'Skeleton Card 4',
-                id: 'skeleton-card-4',
-                description: 'Renders a simple skeleton for testing card layouts but now there are four',
-                component: SkeletonCard,
-            }
+                name: 'Description Card',
+                id: 'description-card',
+                description: 'The task description in markdown',
+                component: DescriptionCard,
+            },
+            {
+                name: 'Markdown Card',
+                id: 'markdown-card',
+                description: 'Renders markdown text',
+                component: MarkdownCard,
+            },
+            {
+                name: 'Git Card',
+                id: 'git-card',
+                description: 'exposes git functionality',
+                component: GitCard,
+            },
         ],
     }
 ]

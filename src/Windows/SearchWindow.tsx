@@ -32,7 +32,7 @@ const getIconFromName = (name: string) => {
 
 export const ResultCard = ({result, focus}) => {
     return (
-        <Card onClick={() => console.log("click card")} className={`result-card ${focus ? 'result-card-focused' : ''}`}>
+        <Card className={`result-card ${focus ? 'result-card-focused' : ''}`}>
         <CardHeader
           image={getIconFromName(result.icon)}
           header={<Text weight="semibold">{result.title}</Text>}

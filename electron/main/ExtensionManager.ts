@@ -3,6 +3,7 @@ import { join } from 'path';
 import fs from 'fs'
 import { getAppContext } from '.';
 import { Command, CardView } from './AppFramework';
+import { init as initLayoutManager } from '../base-extensions/LayoutManager/LayoutManager'
 
 interface ExtensionManifest {
     version: string;
@@ -11,7 +12,7 @@ interface ExtensionManifest {
     main: string; // Main entrypoint of extension. Can define init (App load), cleanup (App close)
 }
 
-interface ExtensionContext {
+export interface ExtensionContext {
     registerCard: (cardId: string, card: CardView) => void;
     registerCommand: (commandId: string, command: Command) => void;
 }
@@ -31,12 +32,16 @@ export default class ExtensionRepository {
 
     get extensionPaths() {
         const appPath = app.getAppPath();
-        console.log(appPath);
         const paths = [
             join(appPath, "../extensions"),
         ];
 
         return paths;
+    }
+
+    // Remove eventually by adding base extension folder to extension paths
+    loadBaseExtensions() {
+        initLayoutManager(this.buildExtensionContext("layout-manager"));
     }
 
     loadExtensionsInPaths() {
@@ -72,8 +77,7 @@ export default class ExtensionRepository {
         try {
             console.log("Loading extension " + 'file://' + extensionInfo.main);
             const extensionObject: Extension = await import('file://' + extensionInfo.main);
-            console.log(extensionObject)
-            extensionObject.init?.(this.buildExtensionContext(extensionInfo.name, 'file://' + extensionInfo.main));
+            extensionObject.init?.(this.buildExtensionContext(extensionInfo.name));
     
             this.loadedExtensions.push(extensionInfo);
         } catch (err) {
@@ -81,7 +85,7 @@ export default class ExtensionRepository {
         }
     }
 
-    buildExtensionContext(extensionId: string, extensionPath: string): ExtensionContext {
+    buildExtensionContext(extensionId: string): ExtensionContext {
         return {
             registerCard: (cardId:string, card: CardView) => {
                 getAppContext().appFramework.registerCard(extensionId, cardId, { ...card });

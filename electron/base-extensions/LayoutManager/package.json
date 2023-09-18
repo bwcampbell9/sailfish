@@ -1,0 +1,5 @@
+{
+    "name": "layout-manager",
+    "version": "0.0.1",
+    "main": "LayoutManager.ts"
+}

@@ -8,7 +8,6 @@ const CardComponent = ({ cardId, fallback }: { cardId: string, fallback?: JSX.El
   useEffect(() => {
     window.ContextBridge.executeCommand("sailfish.getCard", cardId).then((card: unknown) => {
       (async () => {
-        console.log(card);
         const extensionObject = deserialize(card);
         setCardComponent(extensionObject);
       })();

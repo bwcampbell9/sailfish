@@ -14,9 +14,6 @@ export const App = () => {
         window.ContextBridge.onNativeThemeChanged(() => setThemeName(getThemeName()));
     }, []);
 
-    const location = useLocation();
-    console.log(location);
-
     return (
         <FluentProvider theme={ThemeMapping[themeName]} style={{ height: "100vh", width: "100vw", backgroundColor: "transparent" }}>
             <Routes>

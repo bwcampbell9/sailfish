@@ -125,6 +125,27 @@ export default class AppFramework {
                 return this.vault.addTask(path, taskId, task);
             }
         });
+        this.registerCommand("sailfish", "getTask", {
+            name: "Get task",
+            visibility: "protected",
+            execute: (event, path: string) => {
+                return this.vault.getTask(path);
+            }
+        });
+        this.registerCommand("sailfish", "setTaskMetadata", {
+            name: "set task metadata",
+            visibility: "protected",
+            execute: (event, path: string, key: string, value: object) => {
+                return this.vault.setMetadata(path, key, value);
+            }
+        });
+        this.registerCommand("sailfish", "setTaskTitle", {
+            name: "set task title",
+            visibility: "protected",
+            execute: (event, path: string, value: string) => {
+                return this.vault.setTitle(path, value);
+            }
+        });
         this.registerCommand("sailfish", "search", {
             name: "Global search",
             visibility: "protected",

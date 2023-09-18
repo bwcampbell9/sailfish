@@ -24,7 +24,8 @@ export const ProjectTreeComponent = () => {
         <TreeItemLayout aside={<Button appearance="subtle" onClick={(e) => e.stopPropagation()} shape="circular" size="small" icon={<Add16Regular />} />}>{folderId}</TreeItemLayout>
         {children}
     </TreeItem>);
-    const makeItemComponent = (itemId, item) => (<TreeItem onClick={() => openTask(item.path)} key={itemId} itemType="leaf">
+    const makeItemComponent = (itemId, item) => (<TreeItem onClick={() => {
+        openTask(item.path)}} key={itemId} itemType="leaf">
         <TreeItemLayout>{item.name}</TreeItemLayout>
     </TreeItem>);
 

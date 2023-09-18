@@ -63,8 +63,6 @@ const createSearchBrowserWindow = (appIsPackaged: boolean): BrowserWindow => {
 };
 
 const loadFileOrUrl = (browserWindow: BrowserWindow, appIsPackaged: boolean, path: string = "") => {
-    console.log(appIsPackaged);
-    console.log(process.env.VITE_DEV_SERVER_URL + `${path}`);
     appIsPackaged
         ? browserWindow.loadFile(join(__dirname, "..", "..", "dist", `index.html?${path}`))
         : browserWindow.loadURL(process.env.VITE_DEV_SERVER_URL + path);
@@ -88,21 +86,11 @@ const registerNativeThemeEventListeners = (allBrowserWindows: BrowserWindow[]) =
 
 const loadExtensions = () => {
     pluginManager.loadExtensionsInPaths();
-}
-
-const registerFileProtocol = () => {
-    app.whenReady().then(() => {
-        protocol.handle('file', async (request) => {
-          console.log("file request");
-          console.log(request);
-          return new Response('Hello World')
-        });
-    });
+    pluginManager.loadBaseExtensions();
 }
 
 const registerSearchService = (searchWindow: BrowserWindow) => {
     globalShortcut.register('Alt+E', () => {
-        console.log('Search is pressed')
         searchWindow.show();
     });
 }
@@ -110,8 +98,6 @@ const registerSearchService = (searchWindow: BrowserWindow) => {
 
 (async () => {
     await app.whenReady();
-    registerFileProtocol();
-    loadExtensions();
     const mainWindow = createBrowserWindow(app.isPackaged);
     mainWindow.maximize();
     mainWindow.on('ready-to-show', function() {
@@ -120,6 +106,7 @@ const registerSearchService = (searchWindow: BrowserWindow) => {
     });
     const searchWindow = createSearchBrowserWindow(app.isPackaged)
     appFramework = new AppFramework(mainWindow, searchWindow);
+    loadExtensions();
     registerSearchService(searchWindow);
     loadFileOrUrl(mainWindow, app.isPackaged);
     registerIpcEventListeners();
